@@ -23,6 +23,12 @@ public class StringUtil {
         return scanner.nextLine();
     }
 
+    public static String enterAlunoId(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Digite o id do aluno: ");
+        return scanner.nextLine();
+    }
+
     public static Double enterNotaValue(){
         Scanner scanner = new Scanner(System.in);
         System.out.print("Digite a nota do aluno: ");

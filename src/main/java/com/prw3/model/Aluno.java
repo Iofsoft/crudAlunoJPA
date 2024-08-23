@@ -13,7 +13,7 @@ public class Aluno {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(length = 100, nullable = false)
-    private String nome;
+    private String name;
     @Column(nullable = false, unique = true)
     private String ra;
     @Column(unique = true)
@@ -24,10 +24,18 @@ public class Aluno {
 
     public Aluno() {}
 
-    public Aluno(String nome, String ra, String email) {
-        this.nome = nome;
+    public Aluno(String name, String ra, String email) {
+        this.name = name;
         this.ra = ra;
         this.email = email;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -35,7 +43,7 @@ public class Aluno {
         return STR."""
                 =========================
                 Aluno id: \{id}
-                Nome: \{nome}
+                Nome: \{name}
                 RA: \{ra}
                 E-mail: \{email}
                 =========================

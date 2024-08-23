@@ -1,13 +1,14 @@
 package com.prw3.dao;
 
 import com.prw3.model.Aluno;
+import com.prw3.model.Nota;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
-public class AlunoDAO implements DAO<Aluno> {
+public class AlunoDAO implements DAOBase<Aluno> {
     private EntityManager em;
 
     public AlunoDAO() {}
@@ -21,7 +22,6 @@ public class AlunoDAO implements DAO<Aluno> {
         em.getTransaction().begin();
         em.persist(aluno);
         em.getTransaction().commit();
-        em.close();
     }
 
     @Override
@@ -40,8 +40,20 @@ public class AlunoDAO implements DAO<Aluno> {
 
     @Override
     public List<Aluno> findAll() {
-        return List.of();
+        String jpql = "SELECT a FROM Aluno a";
+        try{
+            return em.createQuery(jpql, Aluno.class)
+                    .getResultList();
+        }
+        catch(Exception e){
+            return null;
+        }
     }
+
+//    public List<Aluno> findAllApproved() {
+//
+//    }
+
 
     @Override
     public void delete (Aluno aluno){

@@ -3,6 +3,9 @@ package com.prw3.services;
 import com.prw3.dao.AlunoDAO;
 import com.prw3.model.Aluno;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AlunoService {
     private final AlunoDAO alunoDAO;
 
@@ -18,5 +21,11 @@ public class AlunoService {
         return alunoDAO.findByName(name);
     }
 
-    // Outros métodos relacionados a Aluno
+    public List<Aluno> findAll() {
+        return alunoDAO.findAll();
+    }
+
+//    public List<Aluno> findAllApproved(){
+
+
 }

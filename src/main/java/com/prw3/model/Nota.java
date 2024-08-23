@@ -12,7 +12,7 @@ public class Nota {
     private Long id;
     private Double nota;
     @ManyToOne()
-    @JoinColumn(name = "aluno_id", nullable = false)
+    @JoinColumn(name = "alunoId", nullable = false)
     private Aluno aluno;
     private LocalDateTime dataCadastro = LocalDateTime.now();
 
@@ -21,5 +21,14 @@ public class Nota {
     public Nota(Double nota, Aluno aluno) {
         this.nota = nota;
         this.aluno = aluno;
+    }
+
+    public Long getAlunoId() {
+        return aluno.getId();
+    }
+
+    @Override
+    public String toString() {
+        return STR."ID ALuno: \{aluno.getName() }Nota: \{nota} - Data: \{dataCadastro}";
     }
 }

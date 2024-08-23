@@ -7,8 +7,10 @@ import com.prw3.services.AlunoService;
 import com.prw3.services.NotaService;
 import com.prw3.util.StringUtil;
 
+import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.Long.parseLong;
 
 
 public class Main {
@@ -23,6 +25,7 @@ public class Main {
             System.out.println("1 - Cadastrar aluno");
             System.out.println("2 - Cadastrar nota");
             System.out.println("4 - Buscar Aluno Por Nome");
+            System.out.println("5 - Buscar Todos os Alunos Aprovados");
 
             System.out.println("3 - Sair");
 
@@ -37,8 +40,8 @@ public class Main {
                 case 2:
                     Double notaValue = StringUtil.enterNotaValue();
                     String alunoName = StringUtil.enterAlunoName();
-                    Aluno alunoExistente = alunoService.findByName(alunoName);
-                    Nota nota = new Nota(notaValue, alunoExistente);
+                    Aluno alunoEncontrado = alunoService.findByName(alunoName); // tratamento se nao encontrar
+                    Nota nota = new Nota(notaValue, alunoEncontrado);
                     notaService.saveNota(nota);
                     System.out.println("Nota cadastrada com sucesso!");
                     break;
@@ -51,12 +54,21 @@ public class Main {
                     aluno = alunoService.findByName(nomeAluno);
                     System.out.println(aluno);
                     break;
+                case 5:
+//                    Long alunoId = parseLong(StringUtil.enterAlunoId());
+//                    System.out.println(notaService.findById(alunoId));
+
+                    List<Object[]> listaAprovados = notaService.findAllApproved();
+                    for (Object[] result : listaAprovados) {
+                        // Cada resultado é um array de objetos
+                        Long alunoId = (Long) result[0];
+                        Double averageNota = (Double) result[1];
+                        System.out.println("Aluno ID: " + alunoId + " - Média das Notas: " + averageNota);
+                    }
+                    break;
                 default:
                     System.out.println("Opção inválida");
             }
         }
     }
-
-
-
 }
