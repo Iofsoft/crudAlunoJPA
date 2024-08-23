@@ -1,4 +1,4 @@
-package com.prw3.utils;
+package com.prw3.util;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

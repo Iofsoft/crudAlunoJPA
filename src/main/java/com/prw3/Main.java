@@ -1,54 +1,62 @@
 package com.prw3;
 
-import com.prw3.dao.AlunoDAO;
-import com.prw3.dao.NotaDAO;
+import com.prw3.config.DependencyInjection;
 import com.prw3.model.Aluno;
 import com.prw3.model.Nota;
-import com.prw3.utils.JPAUtil;
-import jakarta.persistence.EntityManager;
+import com.prw3.services.AlunoService;
+import com.prw3.services.NotaService;
+import com.prw3.util.StringUtil;
+
+import java.util.Scanner;
+
 
 
 public class Main {
     public static void main(String[] args) {
+        AlunoService alunoService = DependencyInjection.createAlunoService();
+        NotaService notaService = DependencyInjection.createNotaService();
 
-        System.out.printf("Hello and welcome!");
-        Aluno jovem = new Aluno("Jovem da Silva", "123", "jovem@mail.com");
-        Aluno mina = new Aluno("Mina Pereira", "234", "mina@mail.com");
-        Aluno vagabond = new Aluno("Vagabond Malandro", "345", "vagabond@mail.com");
-        Nota notaJovem1 = new Nota(7.5, jovem);
-        Nota notaJovem2 = new Nota(8.5, jovem);
-        Nota notaJovem3 = new Nota(9.5, jovem);
+        Scanner scanner = new Scanner(System.in);
 
-        Nota notaMina1 = new Nota(9.5, mina);
-        Nota notaMina2 = new Nota(10.0, mina);
-        Nota notaMina3 = new Nota(9.5, mina);
+        while (true) {
+            System.out.println("Digite uma opção:");
+            System.out.println("1 - Cadastrar aluno");
+            System.out.println("2 - Cadastrar nota");
+            System.out.println("4 - Buscar Aluno Por Nome");
 
-        Nota notaVagal1 = new Nota(6.5, vagabond);
-        Nota notaVagal2 = new Nota(4.5, vagabond);
-        Nota notaVagal3 = new Nota(3.5, vagabond);
+            System.out.println("3 - Sair");
 
+            int opcao = Integer.parseInt(scanner.nextLine());
 
-        EntityManager em = JPAUtil.getEntityManager();
-
-        AlunoDAO alunoDAO = new AlunoDAO(em);
-        NotaDAO notaDAO = new NotaDAO(em);
-
-        em.getTransaction().begin();
-
-        alunoDAO.CadastrarAluno(jovem);
-        alunoDAO.CadastrarAluno(mina);
-        alunoDAO.CadastrarAluno(vagabond);
-        notaDAO.CadastrarNota(notaJovem1);
-        notaDAO.CadastrarNota(notaJovem2);
-        notaDAO.CadastrarNota(notaJovem3);
-        notaDAO.CadastrarNota(notaMina1);
-        notaDAO.CadastrarNota(notaMina2);
-        notaDAO.CadastrarNota(notaMina3);
-        notaDAO.CadastrarNota(notaVagal1);
-        notaDAO.CadastrarNota(notaVagal2);
-        notaDAO.CadastrarNota(notaVagal3);
-
-        em.getTransaction().commit();
-        em.close();
+            switch (opcao) {
+                case 1:
+                    Aluno aluno = StringUtil.enterAlunoData();
+                    alunoService.save(aluno);
+                    System.out.println("Aluno cadastrado com sucesso!");
+                    break;
+                case 2:
+                    Double notaValue = StringUtil.enterNotaValue();
+                    String alunoName = StringUtil.enterAlunoName();
+                    Aluno alunoExistente = alunoService.findByName(alunoName);
+                    Nota nota = new Nota(notaValue, alunoExistente);
+                    notaService.saveNota(nota);
+                    System.out.println("Nota cadastrada com sucesso!");
+                    break;
+                case 3:
+                    DependencyInjection.closeEntityManagerFactory();
+                    System.out.println("Saindo...");
+                    return;
+                case 4:
+                    String nomeAluno = StringUtil.enterAlunoName();
+                    aluno = alunoService.findByName(nomeAluno);
+                    System.out.println(aluno);
+                    break;
+                default:
+                    System.out.println("Opção inválida");
+            }
+        }
     }
+
+
+
 }

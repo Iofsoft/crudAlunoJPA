@@ -11,7 +11,7 @@ public class Nota {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double nota;
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "aluno_id", nullable = false)
     private Aluno aluno;
     private LocalDateTime dataCadastro = LocalDateTime.now();
