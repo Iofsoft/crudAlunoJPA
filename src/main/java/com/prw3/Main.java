@@ -17,7 +17,8 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("\nDigite uma opção:");
+            System.out.println("\n** CADASTRO DE ALUNOS **");
+
             System.out.println("1 - Cadastrar aluno");
             System.out.println("2 - Cadastrar nota");
             System.out.println("3 - Buscar Aluno Por Nome");
@@ -28,6 +29,7 @@ public class Main {
             System.out.println("8 - Listar Todas as Notas");
 
             System.out.println("0 - Sair");
+            System.out.println("\nDigite uma opção:");
 
             int opcao = Integer.parseInt(scanner.nextLine());
 
