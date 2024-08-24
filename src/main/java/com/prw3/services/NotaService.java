@@ -1,8 +1,6 @@
 package com.prw3.services;
 
-import com.prw3.config.DependencyInjection;
 import com.prw3.dao.NotaDAO;
-import com.prw3.model.Aluno;
 import com.prw3.model.Nota;
 import com.prw3.util.StringUtil;
 
@@ -10,63 +8,28 @@ import java.util.Collection;
 
 public class NotaService {
     private final NotaDAO notaDAO;
-    AlunoService alunoService = DependencyInjection.createAlunoService();
 
     public NotaService(NotaDAO notaDAO) {
         this.notaDAO = notaDAO;
     }
 
-    public void save() {
-        Double notaValue = StringUtil.enterNotaValue();
-        String alunoName = StringUtil.enterAlunoName();
-        Collection<Aluno> alunosEncontrado = alunoService.findByName(alunoName);
-        if(alunosEncontrado.size() == 1){
-            Aluno aluno = alunosEncontrado.iterator().next();
-            Nota nota = new Nota(notaValue, aluno);
-            notaDAO.save(nota);
-            System.out.println("Nota cadastrada com sucesso!");
-        }
+    public void save(Nota nota) {
+        notaDAO.save(nota);
+        System.out.println("Nota cadastrada com sucesso!");
     }
 
     public Collection<Nota> findByName(String name) {
         return notaDAO.findByName(name);
     }
 
-    public void findAllApproved(){
+    public Collection<Object[]> findAllApproved(){
         System.out.println("\nAlunos Aprovados");
-        Collection<Object[]> listaAprovados = notaDAO.findAllApproved();
-        if(listaAprovados.isEmpty()){
-            System.out.println("\nNenhum Aluno foi aprovado");
-            return;
-        }
-        for (Object[] result : listaAprovados) {
-            Long alunoId = (Long) result[0];
-            Aluno alunoAprovado = alunoService.findById(alunoId).iterator().next();
-            Double averageNota = (Double) result[1];
-            System.out.println(STR.
-                """
-                =====================================
-                Aluno ID: \{alunoId}
-                Nome: \{alunoAprovado.getName()}
-                Média das Notas: \{averageNota}
-                """
-            );
-        }
-        notaDAO.findAllApproved();
+        return notaDAO.findAllApproved();
     }
 
-    public void findAll(){
+    public Collection<Nota> findAll(){
         System.out.println("\nTodas as Notas");
-        Collection<Nota> listaNotas = notaDAO.findAll();
-        for (Nota nota : listaNotas) {
-            Aluno aluno = alunoService.findById(nota.getAluno().getId()).iterator().next();
-            System.out.println(STR.
-                """
-                Nota: \{nota.getNota()} Nome: \{aluno.getName()}
-                """
-            );
-        }
-        notaDAO.findAll();
+        return notaDAO.findAll();
     }
 
     public void update() {
@@ -79,5 +42,18 @@ public class NotaService {
         }
         notaDAO.update(listaNotas);
         System.out.println("\nCadastro atualizado com sucesso");
+    }
+
+    public String getSituacao(String nome){
+        Collection<Nota> listaNotas = findByName(nome);
+        double mediaNotas = listaNotas.stream()
+                                    .mapToDouble(Nota::getNota)
+                                    .average()
+                                    .orElse(0.0);
+        String situacao;
+        if(mediaNotas >= 6.0) situacao = "Aprovado";
+        else if(mediaNotas < 6.0 && mediaNotas >= 4.0) situacao = "Recuperação";
+        else situacao = "Reprovado";
+        return situacao;
     }
 }

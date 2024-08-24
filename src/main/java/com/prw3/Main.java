@@ -37,11 +37,20 @@ public class Main {
 
             switch (opcao) {
                 case 1: // Cadastrar aluno
-                    alunoService.save();
+                    Aluno novoAluno = new Aluno();
+                    StringUtil.enterAlunoData(novoAluno);
+                    alunoService.save(novoAluno);
                     break;
 
                 case 2: // Cadastrar nota
-                    notaService.save();
+                    Double notaValue = StringUtil.enterNotaValue();
+                    String alunoName = StringUtil.enterAlunoName();
+                    Collection<Aluno> alunosEncontrado = alunoService.findByName(alunoName);
+                    if(alunosEncontrado.size() == 1){
+                        Aluno aluno = alunosEncontrado.iterator().next();
+                        Nota nota = new Nota(notaValue, aluno);
+                        notaService.save(nota);
+                    }
                     break;
 
                 case 3: // Alterar aluno
@@ -59,21 +68,55 @@ public class Main {
                 case 6: // Buscar aluno por nome
                     String name = StringUtil.enterAlunoName();
                     Collection<Aluno> listaAlunos = alunoService.findByName(name);
-                    if (!listaAlunos.isEmpty()) listaAlunos.forEach(System.out::println);
+                    if (!listaAlunos.isEmpty()){
+                        for(Aluno aluno : listaAlunos){
+                            System.out.println(STR."\{aluno}Situação: \{notaService.getSituacao(aluno.getName())}");
+                        }
+                    }
+
                     Collection<Nota> listaNotas = notaService.findByName(name);
                     if (!listaNotas.isEmpty()) listaNotas.forEach(System.out::println);
                     break;
 
                 case 7: // Listar todos os alunos
-                    alunoService.findAll();
+                    Collection<Aluno> alunos = alunoService.findAll();
+                    for(Aluno aluno : alunos){
+
+                        System.out.println(STR."\{aluno}Situação: \{notaService.getSituacao(aluno.getName())}");
+                    }
                     break;
 
                 case 8: // Listar todas as notas
-                    notaService.findAll();
+                    Collection<Nota> notas = notaService.findAll();
+                    for (Nota nota : notas) {
+                        Aluno aluno = alunoService.findById(nota.getAluno().getId()).iterator().next();
+                        System.out.println(STR.
+                            """
+                            Nota: \{nota.getNota()} Nome: \{aluno.getName()}
+                            """
+                        );
+                    }
                     break;
 
                 case 9: // Buscar alunos aprovados
-                    notaService.findAllApproved();
+                    Collection<Object[]> listaAprovados = notaService.findAllApproved();
+                    if(listaAprovados.isEmpty()){
+                        System.out.println("\nNenhum Aluno foi aprovado");
+                        return;
+                    }
+                    for (Object[] result : listaAprovados) {
+                        Long alunoId = (Long) result[0];
+                        Aluno alunoAprovado = alunoService.findById(alunoId).iterator().next();
+                        Double averageNota = (Double) result[1];
+                        System.out.println(STR.
+                                """
+                                =====================================
+                                Aluno ID: \{alunoId}
+                                Nome: \{alunoAprovado.getName()}
+                                Média das Notas: \{averageNota}
+                                """
+                        );
+                    }
                     break;
 
                 case 0:

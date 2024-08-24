@@ -51,9 +51,6 @@ public class AlunoDAO implements DAOBase<Aluno> {
                 alunos.forEach(System.out::println);
             } else if (alunos.isEmpty()) {
                 System.out.println("\nNenhum aluno encontrado");
-            } else {
-                System.out.println("\nAluno encontrado:");
-                System.out.println(alunos.iterator().next());
             }
             return alunos;
         } catch (PersistenceException e) {

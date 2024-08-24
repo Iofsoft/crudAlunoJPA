@@ -5,6 +5,7 @@ import com.prw3.model.Aluno;
 import com.prw3.util.StringUtil;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class AlunoService {
     private final AlunoDAO alunoDAO;
@@ -13,10 +14,8 @@ public class AlunoService {
         this.alunoDAO = alunoDAO;
     }
 
-    public void save() {
-        Aluno novoAluno = new Aluno();
-        StringUtil.enterAlunoData(novoAluno);
-        alunoDAO.save(novoAluno);
+    public void save(Aluno aluno) {
+        alunoDAO.save(aluno);
         System.out.println("Aluno cadastrado com sucesso!");
     }
 
@@ -59,9 +58,12 @@ public class AlunoService {
         }
     }
 
-    public void findAll() {
+    public Collection<Aluno> findAll() {
         Collection<Aluno>alunos = alunoDAO.findAll();
-        if(alunos.isEmpty()) System.out.println("\nNenhum Aluno Cadastrado");
-        else alunoDAO.findAll().forEach(System.out::println);
+        if(alunos.isEmpty()){
+            System.out.println("\nNenhum Aluno Cadastrado");
+            return Collections.emptyList();
+        }
+        else return alunos;
     }
 }
