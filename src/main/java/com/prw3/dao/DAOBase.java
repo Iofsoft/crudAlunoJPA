@@ -8,4 +8,5 @@ public interface DAOBase<T> {
     Collection<T> findAll();
     void save(T entity);
     void delete(T entity);
+    void update(Collection<T> collection);
 }

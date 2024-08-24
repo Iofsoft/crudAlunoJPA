@@ -31,8 +31,12 @@ public class Nota {
         return nota;
     }
 
+    public void setNota(Double nota) {
+        this.nota = nota;
+    }
+
     @Override
     public String toString() {
-        return STR."ID ALuno: \{aluno.getName() }Nota: \{nota} - Data: \{dataCadastro}";
+        return STR."Nome Aluno: \{aluno.getName()} Nota: \{nota} - Data: \{dataCadastro}";
     }
 }

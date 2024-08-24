@@ -31,9 +31,9 @@ public class AlunoService {
     public void update() {
         String nomeAluno = StringUtil.enterAlunoName();
         Collection<Aluno> alunos = alunoDAO.findByName(nomeAluno);
-        Aluno alunoEncontrado = alunos.iterator().next();
-        StringUtil.enterAlunoData(alunoEncontrado);
-        alunoDAO.update(alunoEncontrado);
+        Aluno aluno = alunos.iterator().next();
+        StringUtil.enterAlunoData(aluno);
+        alunoDAO.update(alunos);
         System.out.println("\nCadastro atualizado com sucesso");
     }
 

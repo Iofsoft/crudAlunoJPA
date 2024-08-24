@@ -77,7 +77,7 @@ public class AlunoDAO implements DAOBase<Aluno> {
     public void delete(Aluno aluno) {
         try {
             em.getTransaction().begin();
-            em.remove(em.contains(aluno) ? aluno : em.merge(aluno));
+            em.remove(aluno);
             em.getTransaction().commit();
         } catch (PersistenceException e) {
             System.err.println(STR."Erro ao deletar aluno: \{e.getMessage()}");
@@ -87,10 +87,10 @@ public class AlunoDAO implements DAOBase<Aluno> {
         }
     }
 
-    public void update(Aluno aluno) {
+    public void update(Collection<Aluno> alunos) {
         try {
             em.getTransaction().begin();
-            em.merge(aluno);
+            em.merge(alunos.iterator().next());
             em.getTransaction().commit();
         } catch (PersistenceException e) {
             System.err.println(STR."Erro ao atualizar aluno: \{e.getMessage()}");

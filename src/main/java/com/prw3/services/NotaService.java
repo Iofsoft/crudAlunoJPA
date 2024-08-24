@@ -28,9 +28,17 @@ public class NotaService {
         }
     }
 
+    public Collection<Nota> findByName(String name) {
+        return notaDAO.findByName(name);
+    }
+
     public void findAllApproved(){
         System.out.println("\nAlunos Aprovados");
         Collection<Object[]> listaAprovados = notaDAO.findAllApproved();
+        if(listaAprovados.isEmpty()){
+            System.out.println("\nNenhum Aluno foi aprovado");
+            return;
+        }
         for (Object[] result : listaAprovados) {
             Long alunoId = (Long) result[0];
             Aluno alunoAprovado = alunoService.findById(alunoId).iterator().next();
@@ -59,6 +67,17 @@ public class NotaService {
             );
         }
         notaDAO.findAll();
+    }
 
+    public void update() {
+        String nomeAluno = StringUtil.enterAlunoName();
+        Collection<Nota> listaNotas = findByName(nomeAluno);
+        for (Nota nota : listaNotas) {
+            System.out.println(nota);
+            Double notaValue = StringUtil.enterNotaValue();
+            nota.setNota(notaValue);
+        }
+        notaDAO.update(listaNotas);
+        System.out.println("\nCadastro atualizado com sucesso");
     }
 }
