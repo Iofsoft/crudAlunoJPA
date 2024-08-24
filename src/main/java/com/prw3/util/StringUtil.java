@@ -1,38 +1,51 @@
 package com.prw3.util;
 
 import com.prw3.model.Aluno;
-import com.prw3.model.Nota;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class StringUtil {
-    public static Aluno enterAlunoData(){
+    public static void enterAlunoData(Aluno aluno){
         Scanner scanner = new Scanner(System.in);
         System.out.print("Digite o nome do aluno: ");
-        String nome = scanner.nextLine();
+        String nome = scanner.nextLine().toUpperCase();
+        aluno.setName(nome);
         System.out.print("Digite o RA do aluno: ");
-        String ra = scanner.nextLine();
+        String ra = scanner.nextLine().toUpperCase();
+        aluno.setRa(ra);
         System.out.print("Digite o email do aluno: ");
-        String email = scanner.nextLine();
-        return new Aluno(nome, ra, email);
+        String email = scanner.nextLine().toUpperCase();
+        aluno.setEmail(email);
     }
 
     public static String enterAlunoName(){
         Scanner scanner = new Scanner(System.in);
         System.out.print("Digite o nome do aluno: ");
-        return scanner.nextLine();
+        return scanner.nextLine().toUpperCase();
     }
 
-    public static String enterAlunoId(){
+    public static Double enterNotaValue() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Digite o id do aluno: ");
-        return scanner.nextLine();
+        Double nota = null;
+        boolean validInput = false;
+
+        while (!validInput) {
+            System.out.print("Digite a nota do aluno: ");
+            try {
+                nota = scanner.nextDouble();
+                validInput = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, digite um número válido.");
+                scanner.next();
+            }
+        }
+        return nota;
     }
 
-    public static Double enterNotaValue(){
+    public static String enterOption(){
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Digite a nota do aluno: ");
-        return scanner.nextDouble();
+        return scanner.nextLine().toUpperCase();
     }
 
 }

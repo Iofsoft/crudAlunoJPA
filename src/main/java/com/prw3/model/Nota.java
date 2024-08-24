@@ -14,7 +14,7 @@ public class Nota {
     @ManyToOne()
     @JoinColumn(name = "alunoId", nullable = false)
     private Aluno aluno;
-    private LocalDateTime dataCadastro = LocalDateTime.now();
+    private final LocalDateTime dataCadastro = LocalDateTime.now();
 
     public Nota() {}
 
@@ -23,8 +23,12 @@ public class Nota {
         this.aluno = aluno;
     }
 
-    public Long getAlunoId() {
-        return aluno.getId();
+    public Aluno getAluno() {
+        return aluno;
+    }
+
+    public Double getNota() {
+        return nota;
     }
 
     @Override

@@ -38,6 +38,18 @@ public class Aluno {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setRa(String ra) {
+        this.ra = ra;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         return STR."""
@@ -46,7 +58,6 @@ public class Aluno {
                 Nome: \{name}
                 RA: \{ra}
                 E-mail: \{email}
-                =========================
                 """;
     }
 }
